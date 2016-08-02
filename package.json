@@ -1,5 +1,5 @@
 {
-  "name": "vidom-animation-group",
+  "name": "vidom-redux",
   "version": "0.0.1",
   "description": "Redux bindings for Vidom",
   "keywords": [
@@ -16,6 +16,7 @@
     "lib"
   ],
   "dependencies": {
+    "redux": "^3.5.2",
     "vidom": "^0.3.17"
   },
   "devDependencies": {

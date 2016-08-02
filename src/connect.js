@@ -1,4 +1,4 @@
-import { Component } from 'vidom';
+import { Component, node } from 'vidom';
 import { bindActionCreators } from 'redux';
 import shallowEqual from './utils/shallowEqual';
 
@@ -17,17 +17,13 @@ export default (stateToAttrs, actions) => {
         }
 
         onRender(attrs, children) {
-            const resAttrs = {
-                ...this._stateAttrs,
-                ...this._actions,
-                ...attrs
-            };
-
-            return (
-                <ConnectedComponent { ...resAttrs }>
-                    { children }
-                </ConnectedComponent>
-            );
+            return node(ConnectedComponent)
+                .attrs({
+                    ...this._stateAttrs,
+                    ...this._actions,
+                    ...attrs
+                })
+                .children(children);
         }
 
         _onStoreUpdate() {
