@@ -1,0 +1,46 @@
+{
+  "name": "vidom-animation-group",
+  "version": "0.0.1",
+  "description": "Redux bindings for Vidom",
+  "keywords": [
+    "vidom",
+    "redux"
+  ],
+  "main": "lib/index.js",
+  "author": "Dmitry Filatov <dfilatov@yandex-team.ru>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dfilatov/vidom-redux.git"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "vidom": "^0.3.17"
+  },
+  "devDependencies": {
+    "babel-core": "6.10.4",
+    "babel-loader": "6.2.4",
+    "babel-preset-es2015": "6.9.0",
+    "babel-preset-es2015-loose-rollup": "7.0.0",
+    "babel-preset-es2015-minimal": "2.0.0",
+    "babelify": "7.3.0",
+    "browserify": "13.0.1",
+    "eslint": "2.12.0",
+    "expect.js": "0.3.1",
+    "mocha": "2.5.3",
+    "mocha-phantomjs": "4.1.0",
+    "rollup": "0.34.1",
+    "rollup-plugin-babel": "2.6.1",
+    "sinon": "1.17.4",
+    "webpack": "1.13.1",
+    "webpack-dev-server": "1.14.1"
+  },
+  "license": "MIT",
+  "scripts": {
+    "pretest": "eslint src spec/*/*",
+    "test": "browserify specs/boot.js -t babelify -o specs/boot.build.js && mocha-phantomjs specs/runner.html",
+    "build-lib": "rm -rf lib && mkdir -p lib && rollup -c configs/rollup.lib.js",
+    "debug-server": "webpack-dev-server --config debug/webpack.debug.config.js --progress --colors --port 3000"
+  }
+}
