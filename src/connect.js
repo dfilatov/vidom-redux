@@ -2,17 +2,17 @@ import { Component, node } from 'vidom';
 import { bindActionCreators } from 'redux';
 import shallowEqual from './utils/shallowEqual';
 
-export default (stateToAttrs, actions) => {
-    const wrappedActionCreators = dispatch => bindActionCreators(actions, dispatch);
+export default (stateToAttrs, actionCreators) => {
+    const wrappedActionCreators = dispatch => bindActionCreators(actionCreators, dispatch);
 
     return ConnectedComponent => class Connector extends Component {
         onInit() {
             const { store } = this.getContext();
 
             this._store = store;
-            this._actions = actions && wrappedActionCreators(store.dispatch);
+            this._actions = actionCreators && wrappedActionCreators(store.dispatch);
             this._stateAttrs = stateToAttrs(store.getState());
-            this._unsubscribeFromStore = store.subscribe(this._onStoreUpdate.bind(this));
+            this._unsubscribeFromStore = stateToAttrs? store.subscribe(this._onStoreUpdate.bind(this)) : null;
             this._areStateAttrsChanged = false;
         }
 
@@ -20,14 +20,14 @@ export default (stateToAttrs, actions) => {
             return node(ConnectedComponent)
                 .attrs({
                     ...this._stateAttrs,
-                    ...this._actions,
+                    ...{ actions : this._actions },
                     ...attrs
                 })
                 .children(children);
         }
 
         _onStoreUpdate() {
-            const stateAttrs = stateToAttrs(this._store.getState());
+            const stateAttrs = stateToAttrs(this._store.getState(), this.getAttrs());
 
             if(!shallowEqual(stateAttrs, this._stateAttrs)) {
                 this._stateAttrs = stateAttrs;
@@ -47,7 +47,7 @@ export default (stateToAttrs, actions) => {
         }
 
         onUnmount() {
-            this._unsubscribeFromStore();
+            this._unsubscribeFromStore && this._unsubscribeFromStore();
         }
     };
 }

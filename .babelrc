@@ -1,3 +1,4 @@
 {
-  "presets": ["es2015-minimal"]
+  "presets": ["es2015-minimal"],
+  "plugins": ["transform-object-rest-spread"]
 }
