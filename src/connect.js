@@ -3,16 +3,18 @@ import { bindActionCreators } from 'redux';
 import shallowEqual from './utils/shallowEqual';
 
 export default (stateToAttrs, actionCreators) => {
-    const wrappedActionCreators = dispatch => bindActionCreators(actionCreators, dispatch);
+    const boundActionCreators = dispatch => bindActionCreators(actionCreators, dispatch);
 
     return ConnectedComponent => class Connector extends Component {
         onInit() {
             const { store } = this.getContext();
 
             this._store = store;
-            this._actions = actionCreators && wrappedActionCreators(store.dispatch);
-            this._stateAttrs = stateToAttrs(store.getState());
-            this._unsubscribeFromStore = stateToAttrs? store.subscribe(this._onStoreUpdate.bind(this)) : null;
+            this._actions = actionCreators && boundActionCreators(store.dispatch);
+            this._stateAttrs = stateToAttrs && stateToAttrs(store.getState());
+            this._unsubscribeFromStore = this._stateAttrs?
+                store.subscribe(this._onStoreUpdate.bind(this)) :
+                null;
             this._areStateAttrsChanged = false;
         }
 
@@ -20,7 +22,7 @@ export default (stateToAttrs, actionCreators) => {
             return node(ConnectedComponent)
                 .attrs({
                     ...this._stateAttrs,
-                    ...{ actions : this._actions },
+                    ...this._actions,
                     ...attrs
                 })
                 .children(children);
