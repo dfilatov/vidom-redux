@@ -1,13 +1,14 @@
+import { node, mountToDom, unmountFromDom } from 'vidom';
 import { createStore } from 'redux';
-import { node } from 'vidom';
 import connect from '../../src/connect';
 import Provider from '../../src/Provider';
 import sinon from 'sinon';
 
 describe('connect', () => {
-    let store, part1, part2, part3, part4, reducerSpy;
+    let domNode, store, part1, part2, part3, part4, reducerSpy;
 
     beforeEach(() => {
+        domNode = document.createElement('div');
         part1 = {};
         part2 = {};
         part3 = {};
@@ -22,6 +23,10 @@ describe('connect', () => {
         });
     });
 
+    afterEach(done => {
+        unmountFromDom(domNode, done);
+    });
+
     it('should add mapped parts of store to attrs', done => {
         const C = ({ attr1, attr2 }) => {
             expect(attr1).to.be.equal(part1);
@@ -29,10 +34,11 @@ describe('connect', () => {
             done();
         };
 
-        node(Provider)
-            .attrs({ store })
-            .children(node(connect(state => ({ attr1 : part1, attr2 : part2 }))(C)))
-            .renderToDom();
+        mountToDom(
+            domNode,
+            node(Provider)
+                .attrs({ store })
+                .children(node(connect(state => ({ attr1 : part1, attr2 : part2 }))(C))));
     });
 
     it('should add action creator to attrs and bind them to store', done => {
@@ -42,9 +48,59 @@ describe('connect', () => {
             done();
         };
 
-        node(Provider)
-            .attrs({ store })
-            .children(node(connect(null, ({ actionCreator() { return { type : 'no-update' }; } }))(C)))
-            .renderToDom();
+        mountToDom(
+            domNode,
+            node(Provider)
+                .attrs({ store })
+                .children(node(connect(null, ({ actionCreator() { return { type : 'no-update' }; } }))(C))));
+    });
+
+    it('should pass external attrs', done => {
+        const C = ({ extAttr }) => {
+            expect(extAttr).to.be.ok();
+            done();
+        };
+
+        mountToDom(
+            domNode,
+            node(Provider)
+                .attrs({ store })
+                .children(node(connect()(C)).attrs({ extAttr : true })));
+    });
+
+    it('should rerender and pass new state if store has updated', done => {
+        let counter = 0;
+        const C = state => {
+            if(++counter === 2) {
+                expect(state).to.be.eql({ part1, part2, part3, part4 });
+                done();
+            }
+        };
+
+        mountToDom(
+            domNode,
+            node(Provider)
+                .attrs({ store })
+                .children(node(connect(state => state)(C))),
+            () => {
+                store.dispatch({ type : 'update' });
+            });
+    });
+
+    it('shouldn\'t rerender if store hasn\'t updated', done => {
+        let counter = 0;
+        const C = () => {
+            expect(++counter).to.be.equal(1);
+        };
+
+        mountToDom(
+            domNode,
+            node(Provider)
+                .attrs({ store })
+                .children(node(connect(state => state)(C))),
+            () => {
+                store.dispatch({ type : 'no-update' });
+                setTimeout(done, 50);
+            });
     });
 });
