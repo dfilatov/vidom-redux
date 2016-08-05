@@ -1,7 +1,13 @@
-import { Component, node } from 'vidom';
+import { Component, node, IS_DEBUG, console } from 'vidom';
 
 export default class Provider extends Component {
     onInit({ store }) {
+        if(IS_DEBUG) {
+            if(!store) {
+                console.error('Could not find "store" in the attributes of <Provider>.');
+            }
+        }
+
         this._childCtx = { store };
     }
 

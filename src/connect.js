@@ -1,4 +1,4 @@
-import { Component, node } from 'vidom';
+import { Component, node, IS_DEBUG, console } from 'vidom';
 import { bindActionCreators } from 'redux';
 import shallowEqual from './utils/shallowEqual';
 
@@ -8,6 +8,14 @@ export default (stateToAttrs, actionCreators) => {
     return ConnectedComponent => class Connector extends Component {
         onInit() {
             const { store } = this.getContext();
+
+            if(IS_DEBUG) {
+                if(!store) {
+                    console.error(
+                        `Could not find "store" in the context of <${ConnectedComponent.name || 'ConnectedComponent'}>. ` +
+                        'Wrap the root component in a <Provider>.');
+                }
+            }
 
             this._store = store;
             this._actions = actionCreators && boundActionCreators(store.dispatch);
