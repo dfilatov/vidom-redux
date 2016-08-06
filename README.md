@@ -3,3 +3,15 @@
 ## What is it?
 
 This module provides [Redux](https://github.com/reactjs/redux) bindings for [Vidom](https://github.com/dfilatov/vidom).
+
+## Installation
+
+```
+npm i vidom-redux
+```
+
+## API
+
+This module provides:
+  * component `<Provider>` to make store available in the component hierarchy below
+  * `connect` to connect arbitrary Vidom component to a Redux store
