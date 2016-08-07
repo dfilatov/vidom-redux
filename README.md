@@ -17,10 +17,23 @@ This module provides:
   * `connect` to connect arbitrary Vidom component to a Redux store
 
 ### Provider
+
+Provider expects `store` attribute to be passed.
 ```js
+import { mountToDom } from 'vidom';
+import { createStore } from 'redux';
+import { Provider } from 'vidom-redux';
+import App from './components/App';
+import reducer from './reducers';
+
+const store = createStore(reducer);
+
 mountToDom(
-    rootDomElement,
+    document.getElementById('root'),
     <Provider store={ store }>
         <App/>
     </Provider>);
 ```
+
+### connect
+
