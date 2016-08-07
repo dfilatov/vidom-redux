@@ -13,5 +13,14 @@ npm i vidom-redux
 ## API
 
 This module provides:
-  * component `<Provider>` to make store available in the component hierarchy below
+  * `<Provider>` to make store available in the component hierarchy below
   * `connect` to connect arbitrary Vidom component to a Redux store
+
+### Provider
+```js
+mountToDom(
+    rootDomElement,
+    <Provider store={ store }>
+        <App/>
+    </Provider>);
+```
