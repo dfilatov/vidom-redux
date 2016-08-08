@@ -13,13 +13,13 @@ npm i vidom-redux
 ## API
 
 This module provides:
-  * `<Provider>` to make store available in the component hierarchy below
-  * `connect` to connect arbitrary Vidom component to a Redux store
+  * [`<Provider>`](#provider) to make store available in the component hierarchy below
+  * [`connect`](#connect) to connect arbitrary Vidom component to a Redux store
 
 ### Provider
 
 Provider expects `store` attribute to be passed.
-```js
+```jsx
 import { mountToDom } from 'vidom';
 import { createStore } from 'redux';
 import { Provider } from 'vidom-redux';
@@ -37,3 +37,23 @@ mountToDom(
 
 ### connect
 
+`connect` wraps and connects given component to a new one which is connected to a store.
+
+  * *[{Function(storeState, ownAttrs): Object}]* `storeStateToAttrs` maps store state to attributes of wrapped component 
+  * *[{Object}]* `actionCreators` action creators to be bound to store
+
+It returns a function to wrap given component.
+
+```js
+import { Component } from 'vidom';
+import { connect } from 'vidom-redux';
+import * as actions from '../actions';
+
+class MyComponent extends Component {
+    ...
+}
+
+const storeStateToAttrs = ({ subState1, subState2 }) => { subState1, subState2 },
+    MyConnectedComponent = connect(storeStateToAttrs, actions)(MyComponent);
+
+```
