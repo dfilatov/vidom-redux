@@ -2,11 +2,9 @@ import { Component, node, IS_DEBUG, console } from 'vidom';
 import { bindActionCreators } from 'redux';
 import shallowEqual from './utils/shallowEqual';
 
-export default (stateToAttrs, actionCreators) => {
-    const boundActionCreators = dispatch => bindActionCreators(actionCreators, dispatch);
-
-    return ConnectedComponent => class Connector extends Component {
-        onInit() {
+export default (storeStateToAttrs, actionCreators) =>
+    ConnectedComponent => class Connector extends Component {
+        onInit(attrs) {
             const { store } = this.getContext();
 
             if(IS_DEBUG) {
@@ -18,9 +16,9 @@ export default (stateToAttrs, actionCreators) => {
             }
 
             this._store = store;
-            this._actions = actionCreators && boundActionCreators(store.dispatch);
-            this._stateAttrs = stateToAttrs && stateToAttrs(store.getState());
-            this._unsubscribeFromStore = this._stateAttrs?
+            this._actions = actionCreators && bindActionCreators(actionCreators, store.dispatch);
+            this._storeStateAttrs = storeStateToAttrs && storeStateToAttrs(store.getState(), attrs);
+            this._unsubscribeFromStore = this._storeStateAttrs?
                 store.subscribe(this._onStoreUpdate.bind(this)) :
                 null;
             this._areStateAttrsChanged = false;
@@ -29,7 +27,7 @@ export default (stateToAttrs, actionCreators) => {
         onRender(attrs, children) {
             return node(ConnectedComponent)
                 .attrs({
-                    ...this._stateAttrs,
+                    ...this._storeStateAttrs,
                     ...this._actions,
                     ...attrs
                 })
@@ -37,10 +35,10 @@ export default (stateToAttrs, actionCreators) => {
         }
 
         _onStoreUpdate() {
-            const stateAttrs = stateToAttrs(this._store.getState(), this.getAttrs());
+            const stateAttrs = storeStateToAttrs(this._store.getState(), this.getAttrs());
 
-            if(!shallowEqual(stateAttrs, this._stateAttrs)) {
-                this._stateAttrs = stateAttrs;
+            if(!shallowEqual(stateAttrs, this._storeStateAttrs)) {
+                this._storeStateAttrs = stateAttrs;
                 this._areStateAttrsChanged = true;
                 this.update();
             }
@@ -59,5 +57,4 @@ export default (stateToAttrs, actionCreators) => {
         onUnmount() {
             this._unsubscribeFromStore && this._unsubscribeFromStore();
         }
-    };
-}
+    }
