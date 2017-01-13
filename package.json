@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "redux": "^3.5.2",
-    "vidom": "^0.3.18"
+    "vidom": "^0.7.0"
   },
   "devDependencies": {
     "babel-core": "6.13.1",
