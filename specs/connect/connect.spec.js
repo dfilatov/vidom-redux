@@ -1,4 +1,4 @@
-import { node, mountToDom, unmountFromDom } from 'vidom';
+import { node, mount, unmount } from 'vidom';
 import { createStore } from 'redux';
 import connect from '../../src/connect';
 import Provider from '../../src/Provider';
@@ -24,7 +24,7 @@ describe('connect', () => {
     });
 
     afterEach(done => {
-        unmountFromDom(domNode, done);
+        unmount(domNode, done);
     });
 
     it('should add mapped parts of store to attrs', done => {
@@ -34,7 +34,7 @@ describe('connect', () => {
             done();
         };
 
-        mountToDom(
+        mount(
             domNode,
             node(Provider)
                 .attrs({ store })
@@ -48,7 +48,7 @@ describe('connect', () => {
             done();
         };
 
-        mountToDom(
+        mount(
             domNode,
             node(Provider)
                 .attrs({ store })
@@ -61,7 +61,7 @@ describe('connect', () => {
             done();
         };
 
-        mountToDom(
+        mount(
             domNode,
             node(Provider)
                 .attrs({ store })
@@ -77,7 +77,7 @@ describe('connect', () => {
             }
         };
 
-        mountToDom(
+        mount(
             domNode,
             node(Provider)
                 .attrs({ store })
@@ -93,7 +93,7 @@ describe('connect', () => {
             expect(++counter).to.be.equal(1);
         };
 
-        mountToDom(
+        mount(
             domNode,
             node(Provider)
                 .attrs({ store })
