@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "redux": "^3.5.2",
-    "vidom": "^0.7.0"
+    "vidom": "^0.8.0"
   },
   "devDependencies": {
     "babel-core": "6.13.1",
@@ -31,7 +31,8 @@
     "eslint": "2.12.0",
     "expect.js": "0.3.1",
     "mocha": "2.5.3",
-    "mocha-phantomjs": "4.1.0",
+    "mocha-phantomjs-core": "2.1.1",
+    "phantomjs": "2.1.7",
     "rollup": "0.34.3",
     "rollup-plugin-babel": "2.6.1",
     "sinon": "1.17.4",
@@ -41,7 +42,7 @@
   "license": "MIT",
   "scripts": {
     "pretest": "eslint src spec/*/*",
-    "test": "browserify specs/boot.js -t babelify -o specs/boot.build.js && mocha-phantomjs specs/runner.html",
+    "test": "browserify specs/boot.js -t babelify -o specs/boot.build.js && phantomjs ./node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js specs/runner.html spec \"{\\\"useColors\\\":true}\"",
     "build-lib": "rm -rf lib && mkdir -p lib && rollup -c configs/rollup.lib.js",
     "debug-server": "webpack-dev-server --config debug/webpack.debug.config.js --progress --colors --port 3000"
   }

@@ -4,8 +4,8 @@ import shallowEqual from './utils/shallowEqual';
 
 export default (storeStateToAttrs, actionCreators) =>
     ConnectedComponent => class Connector extends Component {
-        onInit(attrs) {
-            const { store } = this.getContext();
+        onInit() {
+            const { store } = this.context;
 
             if(IS_DEBUG) {
                 if(!store) {
@@ -17,25 +17,25 @@ export default (storeStateToAttrs, actionCreators) =>
 
             this._store = store;
             this._actions = actionCreators && bindActionCreators(actionCreators, store.dispatch);
-            this._storeStateAttrs = storeStateToAttrs && storeStateToAttrs(store.getState(), attrs);
+            this._storeStateAttrs = storeStateToAttrs && storeStateToAttrs(store.getState(), this.attrs);
             this._unsubscribeFromStore = this._storeStateAttrs?
                 store.subscribe(this._onStoreUpdate.bind(this)) :
                 null;
             this._areStateAttrsChanged = false;
         }
 
-        onRender(attrs, children) {
+        onRender() {
             return node(ConnectedComponent)
-                .attrs({
+                .setAttrs({
                     ...this._storeStateAttrs,
                     ...this._actions,
-                    ...attrs
+                    ...this.attrs
                 })
-                .children(children);
+                .setChildren(this.children);
         }
 
         _onStoreUpdate() {
-            const stateAttrs = storeStateToAttrs(this._store.getState(), this.getAttrs());
+            const stateAttrs = storeStateToAttrs(this._store.getState(), this.attrs);
 
             if(!shallowEqual(stateAttrs, this._storeStateAttrs)) {
                 this._storeStateAttrs = stateAttrs;
@@ -44,10 +44,10 @@ export default (storeStateToAttrs, actionCreators) =>
             }
         }
 
-        shouldUpdate(nextAttrs, prevAttrs, nextChildren, prevChildren) {
+        shouldUpdate(prevAttrs, prevChildren) {
             return this._areStateAttrsChanged ||
-                !shallowEqual(nextAttrs, prevAttrs) ||
-                nextChildren !== prevChildren;
+                !shallowEqual(this.attrs, prevAttrs) ||
+                this.children !== prevChildren;
         }
 
         onUpdate() {

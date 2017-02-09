@@ -1,7 +1,9 @@
 import { Component, node, IS_DEBUG, console } from 'vidom';
 
 export default class Provider extends Component {
-    onInit({ store }) {
+    onInit() {
+        const { store } = this.attrs;
+
         if(IS_DEBUG) {
             if(!store) {
                 console.error('Could not find "store" in the attributes of <Provider>.');
@@ -15,10 +17,12 @@ export default class Provider extends Component {
         return this._childCtx;
     }
 
-    onRender(_, children) {
+    onRender() {
+        const { children } = this;
+
         return Array.isArray(children)?
             children.length > 1?
-                node('fragment').children(children) :
+                node('fragment').setChildren(children) :
                 children[0] :
             children;
     }
