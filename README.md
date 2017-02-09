@@ -20,7 +20,7 @@ This module provides:
 
 Provider expects `store` attribute to be passed.
 ```jsx
-import { mountToDom } from 'vidom';
+import { mount } from 'vidom';
 import { createStore } from 'redux';
 import { Provider } from 'vidom-redux';
 import App from './components/App';
@@ -28,7 +28,7 @@ import reducer from './reducers';
 
 const store = createStore(reducer);
 
-mountToDom(
+mount(
     document.getElementById('root'),
     <Provider store={ store }>
         <App/>
