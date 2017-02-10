@@ -53,7 +53,7 @@ class MyComponent extends Component {
     ...
 }
 
-const storeStateToAttrs = ({ subState1, subState2 }) => { subState1, subState2 },
+const storeStateToAttrs = ({ subState1, subState2 }) => ({ subState1, subState2 }),
     MyConnectedComponent = connect(storeStateToAttrs, actions)(MyComponent);
 
 ```
