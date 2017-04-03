@@ -1,6 +1,6 @@
 {
   "name": "vidom-redux",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Redux bindings for Vidom",
   "keywords": [
     "vidom",
