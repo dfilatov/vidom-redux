@@ -5,15 +5,15 @@ describe('Provider', () => {
     const store = {};
 
     it('should render passed node if a single child is passed', () => {
-        expect(node(Provider).setAttrs({ store }).setChildren([node('a')]).renderToDom())
+        expect(node(Provider).setAttrs({ store }).setChildren([node('a')]).renderToDom(null))
             .to.be.an(Element);
 
-        expect(node(Provider).setAttrs({ store }).setChildren(node('a')).renderToDom())
+        expect(node(Provider).setAttrs({ store }).setChildren(node('a')).renderToDom(null))
             .to.be.an(Element);
     });
 
     it('should wrap rendering result to a fragment node if multiple children are passed', () => {
-        expect(node(Provider).setAttrs({ store }).setChildren([node('a'), node('b')]).renderToDom())
+        expect(node(Provider).setAttrs({ store }).setChildren([node('a'), node('b')]).renderToDom(null))
             .to.be.a(DocumentFragment);
     });
 
@@ -24,6 +24,6 @@ describe('Provider', () => {
                 expect(ctx.store).to.be.equal(store);
                 done();
             }))
-            .renderToDom();
+            .renderToDom(null);
     });
 });
