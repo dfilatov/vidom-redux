@@ -44,7 +44,7 @@ export default (storeStateToAttrs, actionCreators) =>
             }
         }
 
-        shouldUpdate(prevAttrs, prevChildren) {
+        shouldRerender(prevAttrs, prevChildren) {
             return this._areStateAttrsChanged ||
                 !shallowEqual(this.attrs, prevAttrs) ||
                 this.children !== prevChildren;
