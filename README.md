@@ -1,4 +1,6 @@
-# vidom-redux [![Build Status](https://secure.travis-ci.org/dfilatov/vidom-redux.png)](http://travis-ci.org/dfilatov/vidom-redux) [![npm version](https://badge.fury.io/js/vidom-redux.svg)](http://badge.fury.io/js/vidom-redux)
+# vidom-redux
+[![Build Status](https://img.shields.io/travis/dfilatov/vidom-redux/master.svg?style=flat-square)](https://travis-ci.org/dfilatov/vidom-redux/branches)
+[![NPM Version](https://img.shields.io/npm/v/vidom-redux.svg?style=flat-square)](https://www.npmjs.com/package/vidom-redux)
 
 ## What is it?
 
