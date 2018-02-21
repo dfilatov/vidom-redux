@@ -1,4 +1,4 @@
-import { Component, node, IS_DEBUG, console } from 'vidom';
+import { Component, IS_DEBUG, console } from 'vidom';
 
 export default class Provider extends Component {
     onInit() {
@@ -18,12 +18,6 @@ export default class Provider extends Component {
     }
 
     onRender() {
-        const { children } = this;
-
-        return Array.isArray(children)?
-            children.length > 1?
-                node('fragment').setChildren(children) :
-                children[0] :
-            children;
+        return this.children;
     }
 }

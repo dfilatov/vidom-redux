@@ -1,4 +1,4 @@
-import { Component, node, IS_DEBUG, console } from 'vidom';
+import { Component, elem, IS_DEBUG, console } from 'vidom';
 import { bindActionCreators } from 'redux';
 import shallowEqual from './utils/shallowEqual';
 
@@ -25,23 +25,15 @@ export default (storeStateToAttrs, actionCreators) =>
         }
 
         onRender() {
-            return node(ConnectedComponent)
-                .setAttrs({
+            return elem(
+                ConnectedComponent,
+                null,
+                {
                     ...this._storeStateAttrs,
                     ...this._actions,
                     ...this.attrs
-                })
-                .setChildren(this.children);
-        }
-
-        _onStoreUpdate() {
-            const stateAttrs = storeStateToAttrs(this._store.getState(), this.attrs);
-
-            if(!shallowEqual(stateAttrs, this._storeStateAttrs)) {
-                this._storeStateAttrs = stateAttrs;
-                this._areStateAttrsChanged = true;
-                this.update();
-            }
+                },
+                this.children);
         }
 
         shouldRerender(prevAttrs, prevChildren) {
@@ -56,5 +48,15 @@ export default (storeStateToAttrs, actionCreators) =>
 
         onUnmount() {
             this._unsubscribeFromStore && this._unsubscribeFromStore();
+        }
+
+        _onStoreUpdate() {
+            const stateAttrs = storeStateToAttrs(this._store.getState(), this.attrs);
+
+            if(!shallowEqual(stateAttrs, this._storeStateAttrs)) {
+                this._storeStateAttrs = stateAttrs;
+                this._areStateAttrsChanged = true;
+                this.update();
+            }
         }
     }

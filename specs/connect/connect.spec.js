@@ -1,4 +1,4 @@
-import { node, mount, unmount } from 'vidom';
+import { elem, mount, unmount } from 'vidom';
 import { createStore } from 'redux';
 import connect from '../../src/connect';
 import Provider from '../../src/Provider';
@@ -36,9 +36,11 @@ describe('connect', () => {
 
         mount(
             domNode,
-            node(Provider)
-                .setAttrs({ store })
-                .setChildren(node(connect(state => ({ attr1 : part1, attr2 : part2 }))(C))));
+            elem(
+                Provider,
+                null,
+                { store },
+                elem(connect(state => ({ attr1 : part1, attr2 : part2 }))(C))));
     });
 
     it('should add action creator to attrs and bind them to store', done => {
@@ -50,9 +52,11 @@ describe('connect', () => {
 
         mount(
             domNode,
-            node(Provider)
-                .setAttrs({ store })
-                .setChildren(node(connect(null, ({ actionCreator() { return { type : 'no-update' }; } }))(C))));
+            elem(
+                Provider,
+                null,
+                { store },
+                elem(connect(null, ({ actionCreator() { return { type : 'no-update' }; } }))(C))));
     });
 
     it('should pass external attrs', done => {
@@ -63,9 +67,11 @@ describe('connect', () => {
 
         mount(
             domNode,
-            node(Provider)
-                .setAttrs({ store })
-                .setChildren(node(connect()(C)).setAttrs({ extAttr : true })));
+            elem(
+                Provider,
+                null,
+                { store },
+                elem(connect()(C), null, { extAttr : true })));
     });
 
     it('should rerender and pass new state if store has updated', done => {
@@ -79,9 +85,11 @@ describe('connect', () => {
 
         mount(
             domNode,
-            node(Provider)
-                .setAttrs({ store })
-                .setChildren(node(connect(state => state)(C))),
+            elem(
+                Provider,
+                null,
+                { store },
+                elem(connect(state => state)(C))),
             () => {
                 store.dispatch({ type : 'update' });
             });
@@ -95,9 +103,11 @@ describe('connect', () => {
 
         mount(
             domNode,
-            node(Provider)
-                .setAttrs({ store })
-                .setChildren(node(connect(state => state)(C))),
+            elem(
+                Provider,
+                null,
+                { store },
+                elem(connect(state => state)(C))),
             () => {
                 store.dispatch({ type : 'no-update' });
                 setTimeout(done, 50);
